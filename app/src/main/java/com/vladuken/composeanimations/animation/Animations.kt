@@ -14,7 +14,6 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,7 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 const val HELLO_ANDROID = "Hello Android"
 
 @Composable
-fun AnimatedVisibilityExample(
+fun AnimatedVisibilitySample(
     modifier: Modifier = Modifier,
     isVisible: Boolean,
     text: String = HELLO_ANDROID,
@@ -52,7 +51,7 @@ fun AnimatedVisibilityExample(
 }
 
 @Composable
-fun AnimatedVisibilityWithTransitionStateExample(
+fun AnimatedVisibilityTransitionState(
     modifier: Modifier = Modifier,
     isVisible: MutableTransitionState<Boolean>,
     text: String = HELLO_ANDROID,
@@ -73,34 +72,13 @@ fun AnimatedVisibilityWithTransitionStateExample(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun AnimatedVisibilityExamplePreview() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        var visible by remember { mutableStateOf(true) }
-        Button(onClick = { visible = !visible }) {
-            Text(text = if (visible) "Hide" else "Show")
-        }
-        // Simple FadeIn/Out
-        FadeSimple(visible)
-        // FadeIn/Out with SlideIn/Out
-        FadeWithSlide(visible)
-        // Custom Offset SlideIn/Out
-        FadeWithSliceCustomOffset(visible)
-        // MutableTransitionState
-        AnimationWithMutableTransitionState()
-        // AnimatedVisibilityWithChildren
-        AnimatedVisibilityWithChildren()
-    }
-}
+/**
+ * Animations
+ */
 
 @Composable
 private fun FadeSimple(visible: Boolean) {
-    AnimatedVisibilityExample(
+    AnimatedVisibilitySample(
         isVisible = visible,
         enter = fadeIn(),
         exit = fadeOut(),
@@ -109,7 +87,7 @@ private fun FadeSimple(visible: Boolean) {
 
 @Composable
 private fun FadeWithSlide(visible: Boolean) {
-    AnimatedVisibilityExample(
+    AnimatedVisibilitySample(
         isVisible = visible,
         enter = fadeIn() + slideInHorizontally(),
         exit = fadeOut() + slideOutHorizontally(),
@@ -118,14 +96,10 @@ private fun FadeWithSlide(visible: Boolean) {
 
 @Composable
 private fun FadeWithSliceCustomOffset(visible: Boolean) {
-    AnimatedVisibilityExample(
+    AnimatedVisibilitySample(
         isVisible = visible,
-        enter = fadeIn() + slideInHorizontally {
-            -it * 2
-        },
-        exit = fadeOut() + slideOutHorizontally {
-            it * 2
-        },
+        enter = fadeIn() + slideInHorizontally { -it * 2 },
+        exit = fadeOut() + slideOutHorizontally { it * 2 },
     )
 }
 
@@ -139,16 +113,15 @@ private fun AnimationWithMutableTransitionState() {
         !state.isIdle && !state.currentState -> Color.Blue
         else -> error("Illegal State $state")
     }
-    Button(
+    ShowHideButton(
+        visible = state.currentState,
         onClick = { state.targetState = !state.targetState },
         colors = ButtonDefaults.buttonColors(
             containerColor = color,
             contentColor = Color.Black
         )
-    ) {
-        Text(text = if (state.currentState) "Hide" else "Show")
-    }
-    AnimatedVisibilityWithTransitionStateExample(
+    )
+    AnimatedVisibilityTransitionState(
         isVisible = state,
         enter = fadeIn() + slideInHorizontally { -it * 2 },
         exit = fadeOut() + slideOutHorizontally { it * 2 },
@@ -162,13 +135,13 @@ fun AnimatedVisibilityWithChildren(
     modifier: Modifier = Modifier,
 ) {
     var visible by remember { mutableStateOf(true) }
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(onClick = { visible = !visible }) {
-            Text(text = if (visible) "Hide" else "Show")
-        }
+        ShowHideButton(
+            visible = visible,
+            onClick = { visible = !visible }
+        )
         AnimatedVisibility(
             modifier = modifier,
             visible = visible,
@@ -207,5 +180,31 @@ fun AnimatedVisibilityWithChildren(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AnimatedVisibilityExamplePreview() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        var visible by remember { mutableStateOf(true) }
+        ShowHideButton(
+            visible = visible,
+            onClick = { visible = !visible }
+        )
+        // Simple FadeIn/Out
+        FadeSimple(visible)
+        // FadeIn/Out with SlideIn/Out
+        FadeWithSlide(visible)
+        // Custom Offset SlideIn/Out
+        FadeWithSliceCustomOffset(visible)
+        // MutableTransitionState
+        AnimationWithMutableTransitionState()
+        // AnimatedVisibilityWithChildren
+        AnimatedVisibilityWithChildren()
     }
 }
