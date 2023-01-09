@@ -107,10 +107,14 @@ private fun FadeWithSliceCustomOffset(visible: Boolean) {
 private fun AnimationWithMutableTransitionState() {
     val state = remember { MutableTransitionState(true) }
     val color = when {
-        state.isIdle && state.currentState -> Color.Green
-        !state.isIdle && state.currentState -> Color.Yellow
-        state.isIdle && !state.currentState -> Color.Red
+        // Appearing
         !state.isIdle && !state.currentState -> Color.Blue
+        // Appeared
+        state.isIdle && state.currentState -> Color.Green
+        // Hiding
+        !state.isIdle && state.currentState -> Color.Yellow
+        // Hidden
+        state.isIdle && !state.currentState -> Color.Red
         else -> error("Illegal State $state")
     }
     ShowHideButton(
@@ -183,9 +187,9 @@ fun AnimatedVisibilityWithChildren(
     }
 }
 
-@Preview(showBackground = true)
+
 @Composable
-fun AnimatedVisibilityExamplePreview() {
+fun AnimatedVisibilityScreen() {
     Column(
         modifier = Modifier
             .fillMaxWidth(),
@@ -197,14 +201,45 @@ fun AnimatedVisibilityExamplePreview() {
             onClick = { visible = !visible }
         )
         // Simple FadeIn/Out
+        /**
+         * Здесь можно начать с рассказа о том, как сделать самую простую анимацию с AnimatedVisibility
+         */
         FadeSimple(visible)
         // FadeIn/Out with SlideIn/Out
+        /**
+         * Далее указать, что анимации можно конкатенировать, и таким образом делать свою кастомную анимацию
+         */
         FadeWithSlide(visible)
         // Custom Offset SlideIn/Out
+        /**
+         * Слудующий шаг - указать, что для анимаций можно сделать кастомный offset
+         * - В этот же момент можно показать, что анимации в Compose прерываемы:
+         * если их остановить во время выполнения, то они плавно вернутся в исходное положение
+         */
         FadeWithSliceCustomOffset(visible)
+
         // MutableTransitionState
+        /**
+         * MutableTransitionState - рассказать про этот стейтхолдер,
+         * который позволяет отслеживать текущее состояние анимации
+         */
         AnimationWithMutableTransitionState()
         // AnimatedVisibilityWithChildren
+        /**
+         * Дополнительная возможность AnimatedVisibility - предоставлять Modifier.animateEnterExit,
+         * позволяющий указывать кастомные анимации для children
+         * Собственно, тут можно сказать, что те три анимации, которые мы сделали выше - можно сделать проще
+         */
         AnimatedVisibilityWithChildren()
+        /**
+         * Далее можно упомянуть что сейчас, когда элемент становится невидимым, он также не занимает место
+         * И чтобы сохранить место - нужно использовать другой способ анимации - плавный переход к animate*AsState
+         */
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AnimatedVisibilityScreenPreview() {
+    AnimatedVisibilityScreen()
 }

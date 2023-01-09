@@ -3,10 +3,15 @@ package com.vladuken.composeanimations
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.vladuken.composeanimations.animation.AnimatedVisibilityScreen
+import com.vladuken.composeanimations.animation.AnimationSpot
 import com.vladuken.composeanimations.ui.theme.ComposeAnimationsTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,4 +28,21 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+@Composable
+fun AnimationsScreen(
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        AnimationSpot(title = "AnimatedVisibility") {
+            AnimatedVisibilityScreen()
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AnimationsScreenPreview() {
+    AnimationsScreen()
 }
