@@ -3,11 +3,15 @@ package com.vladuken.composeanimations.animation
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
@@ -24,12 +28,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 
+const val HELLO_ANDROID = "Hello Android"
 
 @Composable
 fun AnimatedVisibilityExample(
     modifier: Modifier = Modifier,
     isVisible: Boolean,
-    text: String = "Hello Android",
+    text: String = HELLO_ANDROID,
     enter: EnterTransition,
     exit: ExitTransition,
 ) {
@@ -50,7 +55,7 @@ fun AnimatedVisibilityExample(
 fun AnimatedVisibilityWithTransitionStateExample(
     modifier: Modifier = Modifier,
     isVisible: MutableTransitionState<Boolean>,
-    text: String = "Hello Android",
+    text: String = HELLO_ANDROID,
     enter: EnterTransition,
     exit: ExitTransition,
 ) {
@@ -66,6 +71,7 @@ fun AnimatedVisibilityWithTransitionStateExample(
         )
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
@@ -87,6 +93,8 @@ fun AnimatedVisibilityExamplePreview() {
         FadeWithSliceCustomOffset(visible)
         // MutableTransitionState
         AnimationWithMutableTransitionState()
+        // AnimatedVisibilityWithChildren
+        AnimatedVisibilityWithChildren()
     }
 }
 
@@ -98,7 +106,6 @@ private fun FadeSimple(visible: Boolean) {
         exit = fadeOut(),
     )
 }
-
 
 @Composable
 private fun FadeWithSlide(visible: Boolean) {
@@ -146,4 +153,59 @@ private fun AnimationWithMutableTransitionState() {
         enter = fadeIn() + slideInHorizontally { -it * 2 },
         exit = fadeOut() + slideOutHorizontally { it * 2 },
     )
+}
+
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun AnimatedVisibilityWithChildren(
+    modifier: Modifier = Modifier,
+) {
+    var visible by remember { mutableStateOf(true) }
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(onClick = { visible = !visible }) {
+            Text(text = if (visible) "Hide" else "Show")
+        }
+        AnimatedVisibility(
+            modifier = modifier,
+            visible = visible,
+            enter = EnterTransition.None,
+            exit = ExitTransition.None
+        ) {
+            Box {
+                Column {
+                    Text(
+                        modifier = Modifier
+                            .animateEnterExit(
+                                enter = slideInHorizontally(),
+                                exit = slideOutHorizontally()
+                            ),
+                        text = "$HELLO_ANDROID : 1",
+                        style = MaterialTheme.typography.headlineLarge
+                    )
+                    Text(
+                        modifier = Modifier
+                            .animateEnterExit(
+                                enter = fadeIn(),
+                                exit = fadeOut()
+                            ),
+                        text = "$HELLO_ANDROID : 2",
+                        style = MaterialTheme.typography.headlineLarge
+                    )
+                    Text(
+                        modifier = Modifier
+                            .animateEnterExit(
+                                enter = scaleIn(),
+                                exit = scaleOut()
+                            ),
+                        text = "$HELLO_ANDROID : 3",
+                        style = MaterialTheme.typography.headlineLarge
+                    )
+                }
+            }
+        }
+    }
 }
