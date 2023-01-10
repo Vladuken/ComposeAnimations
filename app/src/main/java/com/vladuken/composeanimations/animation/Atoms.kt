@@ -42,8 +42,7 @@ fun AnimationSpot(
     content: @Composable () -> Unit
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth(0.5f),
+        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(

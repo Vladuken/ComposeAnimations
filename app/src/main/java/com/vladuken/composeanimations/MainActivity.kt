@@ -5,11 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.vladuken.composeanimations.animation.AnimateAsStateScreen
 import com.vladuken.composeanimations.animation.AnimatedVisibilityScreen
 import com.vladuken.composeanimations.animation.AnimationSpot
 import com.vladuken.composeanimations.ui.theme.ComposeAnimationsTheme
@@ -34,9 +36,12 @@ class MainActivity : ComponentActivity() {
 fun AnimationsScreen(
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier.fillMaxWidth()) {
         AnimationSpot(title = "AnimatedVisibility") {
             AnimatedVisibilityScreen()
+        }
+        AnimationSpot(title = "animate***AsState()") {
+            AnimateAsStateScreen()
         }
     }
 }
