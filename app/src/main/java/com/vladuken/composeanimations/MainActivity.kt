@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.vladuken.composeanimations.animation.AnimateAsStateScreen
 import com.vladuken.composeanimations.animation.AnimatedContentScreen
+import com.vladuken.composeanimations.animation.AnimatedContentSizeScreen
 import com.vladuken.composeanimations.animation.AnimatedVisibilityScreen
 import com.vladuken.composeanimations.animation.AnimationSpot
 import com.vladuken.composeanimations.ui.theme.ComposeAnimationsTheme
@@ -53,6 +54,9 @@ fun AnimationsScreen(
         }
         AnimationSpot(title = "AnimatedContent (Experimental)") {
             AnimatedContentScreen()
+        }
+        AnimationSpot(title = "Modifier.animateContentSize()") {
+            AnimatedContentSizeScreen()
         }
     }
 }
