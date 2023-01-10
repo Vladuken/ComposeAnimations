@@ -6,12 +6,15 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.vladuken.composeanimations.animation.AnimateAsStateScreen
+import com.vladuken.composeanimations.animation.AnimatedContentScreen
 import com.vladuken.composeanimations.animation.AnimatedVisibilityScreen
 import com.vladuken.composeanimations.animation.AnimationSpot
 import com.vladuken.composeanimations.ui.theme.ComposeAnimationsTheme
@@ -26,6 +29,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    AnimationsScreen()
                 }
             }
         }
@@ -36,12 +40,19 @@ class MainActivity : ComponentActivity() {
 fun AnimationsScreen(
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+    ) {
         AnimationSpot(title = "AnimatedVisibility") {
             AnimatedVisibilityScreen()
         }
         AnimationSpot(title = "animate***AsState()") {
             AnimateAsStateScreen()
+        }
+        AnimationSpot(title = "AnimatedContent (Experimental)") {
+            AnimatedContentScreen()
         }
     }
 }
