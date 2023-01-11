@@ -104,6 +104,6 @@ fun AnimatableSamplesScreen() {
 
 @Preview
 @Composable
-fun AnimationSamplePreview() {
+fun AnimatableSamplePreview() {
     AnimatableSamplesScreen()
 }
