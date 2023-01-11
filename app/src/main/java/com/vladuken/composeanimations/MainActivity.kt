@@ -13,6 +13,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.vladuken.composeanimations.animation.AnimatableSamplesScreen
 import com.vladuken.composeanimations.animation.AnimateAsStateScreen
 import com.vladuken.composeanimations.animation.AnimatedContentScreen
 import com.vladuken.composeanimations.animation.AnimatedContentSizeScreen
@@ -57,6 +58,9 @@ fun AnimationsScreen(
         }
         AnimationSpot(title = "Modifier.animateContentSize()") {
             AnimatedContentSizeScreen()
+        }
+        AnimationSpot(title = "Animatable Samples") {
+            AnimatableSamplesScreen()
         }
     }
 }
