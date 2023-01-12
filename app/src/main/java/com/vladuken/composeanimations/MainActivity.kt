@@ -18,6 +18,7 @@ import com.vladuken.composeanimations.animation.AnimateAsStateScreen
 import com.vladuken.composeanimations.animation.AnimatedContentScreen
 import com.vladuken.composeanimations.animation.AnimatedContentSizeScreen
 import com.vladuken.composeanimations.animation.AnimatedVisibilityScreen
+import com.vladuken.composeanimations.animation.AnimationSamplesScreen
 import com.vladuken.composeanimations.animation.AnimationSpot
 import com.vladuken.composeanimations.ui.theme.ComposeAnimationsTheme
 
@@ -61,6 +62,9 @@ fun AnimationsScreen(
         }
         AnimationSpot(title = "Animatable Samples") {
             AnimatableSamplesScreen()
+        }
+        AnimationSpot(title = "Animation Samples") {
+            AnimationSamplesScreen()
         }
     }
 }
