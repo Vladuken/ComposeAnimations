@@ -57,7 +57,7 @@ fun AnimationsScreen(
         AnimationSpot(title = "AnimatedContent (Experimental)") {
             AnimatedContentScreen()
         }
-        AnimationSpot(title = "Modifier.animateContentSize()") {
+        AnimationSpot(title = ".animateContentSize()") {
             AnimatedContentSizeScreen()
         }
         AnimationSpot(title = "Animatable Samples") {
