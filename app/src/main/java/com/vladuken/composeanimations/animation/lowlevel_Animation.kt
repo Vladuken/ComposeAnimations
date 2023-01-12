@@ -1,6 +1,5 @@
 package com.vladuken.composeanimations.animation
 
-import androidx.annotation.FloatRange
 import androidx.compose.animation.core.Animation
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.DecayAnimation
@@ -9,14 +8,10 @@ import androidx.compose.animation.core.FloatExponentialDecaySpec
 import androidx.compose.animation.core.TargetBasedAnimation
 import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
@@ -32,9 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
@@ -78,39 +71,12 @@ private fun AnimationSample(
     AnimationDebugString(
         modifier = modifier,
         fraction = fraction,
-        animationTime = animationTime,
-        animationFrame = animationFrame,
-        isAnimationFinished = animation.isFinishedFromNanos(animationTime)
+        text = "Time: %04d Frame: %03d IsFinished: %5b".format(
+            animationTime / 1_000_000,
+            animationFrame,
+            animation.isFinishedFromNanos(animationTime)
+        ),
     )
-}
-
-@Composable
-private fun AnimationDebugString(
-    modifier: Modifier = Modifier,
-    @FloatRange(from = 0.0, to = 1.0) fraction: Float,
-    animationTime: Long,
-    animationFrame: Int,
-    isAnimationFinished: Boolean,
-) {
-    Column(
-        modifier = modifier
-            .padding(vertical = 4.dp)
-    ) {
-        Text(
-            text = "Time: %04d Frame: %03d IsFinished: %5b".format(
-                animationTime / 1_000_000,
-                animationFrame,
-                isAnimationFinished
-            ),
-        )
-        Spacer(
-            modifier = Modifier
-                .background(Color.Gray)
-                .height(8.dp)
-                .fillMaxWidth(fraction)
-        )
-    }
-
 }
 
 @Composable
