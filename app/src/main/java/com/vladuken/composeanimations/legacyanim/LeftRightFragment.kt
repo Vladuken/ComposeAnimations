@@ -1,17 +1,16 @@
 package com.vladuken.composeanimations.legacyanim
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.dynamicanimation.animation.DynamicAnimation
-import androidx.dynamicanimation.animation.SpringAnimation
-import androidx.dynamicanimation.animation.SpringForce
 import androidx.fragment.app.Fragment
+import com.google.android.material.math.MathUtils
 import com.vladuken.composeanimations.R
-
 
 class LeftRightFragment : Fragment() {
 
@@ -40,26 +39,60 @@ class LeftRightFragment : Fragment() {
 
             rect.setOnClickListener { reset(view, rect) }
 
-            val animx = SpringAnimation(rect, DynamicAnimation.TRANSLATION_X)
-            val animy = SpringAnimation(rect, DynamicAnimation.TRANSLATION_Y)
-
-            animx.spring = SpringForce()
-            animy.spring = SpringForce()
-
-            animx.spring.dampingRatio = SpringForce.DAMPING_RATIO_NO_BOUNCY
-            animx.spring.stiffness = SpringForce.STIFFNESS_VERY_LOW
-
-            animy.spring.dampingRatio = SpringForce.DAMPING_RATIO_NO_BOUNCY
-            animy.spring.stiffness = SpringForce.STIFFNESS_VERY_LOW
+            var animator: ValueAnimator? = null
 
             topLeftButton.setOnClickListener {
-                animx.animateToFinalPosition(0f)
-                animy.animateToFinalPosition(0f)
+
+                animator?.cancel()
+                animator?.removeAllUpdateListeners()
+
+                val startTop = rect.translationY
+                val startLeft = rect.translationX
+
+                animator = ObjectAnimator.ofFloat(0f, 1f)
+                    .setDuration(duration)
+
+                animator?.addUpdateListener {
+                    val fraction = it.animatedFraction
+
+                    val left = MathUtils.lerp(startLeft, 40f, fraction)
+                    val top = MathUtils.lerp(startTop, 40f, fraction)
+
+                    rect.translationX = left
+                    rect.translationY = top
+                }
+
+                animator?.start()
+
             }
 
             topRightButton.setOnClickListener {
-                animx.animateToFinalPosition((view.width - rect.width).toFloat())
-                animy.animateToFinalPosition(0f)
+
+                animator?.cancel()
+                animator?.removeAllUpdateListeners()
+
+                val startTop = rect.translationY
+                val startLeft = rect.translationX
+
+                animator = ObjectAnimator.ofFloat(0f, 1f)
+                    .setDuration(duration)
+
+                animator?.addUpdateListener {
+
+                    val fraction = it.animatedFraction
+
+                    val left = MathUtils.lerp(
+                        startLeft,
+                        (view.width - rect.width - 40f).toFloat(),
+                        fraction
+                    )
+                    val top = MathUtils.lerp(startTop, 40f, fraction)
+
+                    rect.translationX = left
+                    rect.translationY = top
+                }
+
+                animator?.start()
             }
         }
     }
@@ -69,6 +102,6 @@ class LeftRightFragment : Fragment() {
         val top = root.height / 2 - rect.height / 2
 
         rect.translationX = left.toFloat()
-        rect.translationY = top.toFloat()
+        rect.translationY = top.toFloat() + 100f
     }
 }
