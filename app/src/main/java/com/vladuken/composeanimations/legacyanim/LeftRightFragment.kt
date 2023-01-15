@@ -63,7 +63,6 @@ class LeftRightFragment : Fragment() {
                 }
 
                 animator?.start()
-
             }
 
             topRightButton.setOnClickListener {
@@ -83,7 +82,7 @@ class LeftRightFragment : Fragment() {
 
                     val left = MathUtils.lerp(
                         startLeft,
-                        (view.width - rect.width - 40f).toFloat(),
+                        (view.width - rect.width - 40f),
                         fraction
                     )
                     val top = MathUtils.lerp(startTop, 40f, fraction)
