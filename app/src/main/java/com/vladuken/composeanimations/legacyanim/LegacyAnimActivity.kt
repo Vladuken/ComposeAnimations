@@ -1,6 +1,7 @@
 package com.vladuken.composeanimations.legacyanim
 
 import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -32,18 +33,25 @@ class LegacyAnimActivity : AppCompatActivity() {
 
         button.setOnClickListener {
 
+            var animator: ValueAnimator? = null
+
             if (isSmall) {
                 isSmall = false
 
-                val animator =
+                animator?.cancel()
+                animator?.removeAllUpdateListeners()
+
+                animator =
                     ObjectAnimator.ofFloat(0f, 1f)
                         .setDuration(1000L)
 
                 animator.interpolator = LinearInterpolator()
                 animator.addUpdateListener {
 
+                    val cur = view.width
+
                     val fraction = it.animatedFraction
-                    val size = MathUtils.lerp(startPx, endPx, fraction)
+                    val size = MathUtils.lerp(cur.toFloat(), endPx, fraction)
 
                     val params = view.layoutParams as ConstraintLayout.LayoutParams
                     params.width = size.toInt()
@@ -58,16 +66,20 @@ class LegacyAnimActivity : AppCompatActivity() {
             } else {
                 isSmall = true
 
+                animator?.cancel()
+                animator?.removeAllUpdateListeners()
 
-                val animator =
+                animator =
                     ObjectAnimator.ofFloat(0f, 1f)
                         .setDuration(1000L)
 
                 animator.interpolator = LinearInterpolator()
                 animator.addUpdateListener {
 
+                    val cur = view.width
+
                     val fraction = it.animatedFraction
-                    val size = MathUtils.lerp(endPx, startPx, fraction)
+                    val size = MathUtils.lerp(cur.toFloat(), startPx, fraction)
 
                     val params = view.layoutParams as ConstraintLayout.LayoutParams
                     params.width = size.toInt()
