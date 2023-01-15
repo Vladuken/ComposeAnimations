@@ -1,17 +1,17 @@
 package com.vladuken.composeanimations.legacyanim
 
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.dynamicanimation.animation.DynamicAnimation
+import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.dynamicanimation.animation.SpringForce
 import androidx.fragment.app.Fragment
-import com.google.android.material.math.MathUtils
 import com.vladuken.composeanimations.R
+
 
 class LeftRightFragment : Fragment() {
 
@@ -40,82 +40,35 @@ class LeftRightFragment : Fragment() {
 
             rect.setOnClickListener { reset(view, rect) }
 
-            var animator: ValueAnimator? = null
+            val animx = SpringAnimation(rect, DynamicAnimation.TRANSLATION_X)
+            val animy = SpringAnimation(rect, DynamicAnimation.TRANSLATION_Y)
+
+            animx.spring = SpringForce()
+            animy.spring = SpringForce()
+
+            animx.spring.dampingRatio = SpringForce.DAMPING_RATIO_NO_BOUNCY
+            animx.spring.stiffness = SpringForce.STIFFNESS_VERY_LOW
+
+            animy.spring.dampingRatio = SpringForce.DAMPING_RATIO_NO_BOUNCY
+            animy.spring.stiffness = SpringForce.STIFFNESS_VERY_LOW
 
             topLeftButton.setOnClickListener {
-
-                animator?.cancel()
-                animator?.removeAllUpdateListeners()
-
-                val startTop = (rect.layoutParams as ConstraintLayout.LayoutParams).topMargin
-                val startLeft = (rect.layoutParams as ConstraintLayout.LayoutParams).leftMargin
-
-                animator = ObjectAnimator.ofFloat(0f, 1f)
-                    .setDuration(duration)
-
-                animator?.addUpdateListener {
-
-                    val params = rect.layoutParams as ConstraintLayout.LayoutParams
-                    val fraction = it.animatedFraction
-
-                    val left = MathUtils.lerp(startLeft.toFloat(), 0f, fraction)
-                    val top = MathUtils.lerp(startTop.toFloat(), 0f, fraction)
-
-
-                    params.topMargin = top.toInt()
-                    params.leftMargin = left.toInt()
-
-                    rect.layoutParams = params
-                }
-
-                animator?.start()
-
+                animx.animateToFinalPosition(0f)
+                animy.animateToFinalPosition(0f)
             }
 
             topRightButton.setOnClickListener {
-
-                animator?.cancel()
-                animator?.removeAllUpdateListeners()
-
-                val startTop = (rect.layoutParams as ConstraintLayout.LayoutParams).topMargin
-                val startLeft = (rect.layoutParams as ConstraintLayout.LayoutParams).leftMargin
-
-                animator = ObjectAnimator.ofFloat(0f, 1f)
-                    .setDuration(duration)
-
-                animator?.addUpdateListener {
-
-                    val params = rect.layoutParams as ConstraintLayout.LayoutParams
-                    val fraction = it.animatedFraction
-
-                    val left = MathUtils.lerp(
-                        startLeft.toFloat(),
-                        (view.width - rect.width).toFloat(),
-                        fraction
-                    )
-                    val top = MathUtils.lerp(startTop.toFloat(), 0f, fraction)
-
-
-                    params.topMargin = top.toInt()
-                    params.leftMargin = left.toInt()
-
-                    rect.layoutParams = params
-                }
-
-                animator?.start()
-
+                animx.animateToFinalPosition((view.width - rect.width).toFloat())
+                animy.animateToFinalPosition(0f)
             }
         }
     }
 
     private fun reset(root: View, rect: SampleRect) {
-        val params = rect.layoutParams as ConstraintLayout.LayoutParams
         val left = root.width / 2 - rect.width / 2
         val top = root.height / 2 - rect.height / 2
 
-        params.leftMargin = left
-        params.topMargin = top
-
-        rect.layoutParams = params
+        rect.translationX = left.toFloat()
+        rect.translationY = top.toFloat()
     }
 }
