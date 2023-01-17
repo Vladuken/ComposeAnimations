@@ -13,6 +13,20 @@
         android:theme="@style/Theme.ComposeAnimations"
         tools:targetApi="31">
         <activity
+            android:name=".performance.ComposePerfActivity"
+            android:enabled="true"
+            android:exported="true"
+            android:theme="@style/Theme.ComposeAnimations">
+
+        </activity>
+        <activity
+            android:name=".performance.PerformanceActivity"
+            android:enabled="true"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat">
+
+        </activity>
+        <activity
             android:name=".legacyanim.LegacyAnimActivity"
             android:enabled="true"
             android:exported="true"
@@ -22,6 +36,8 @@
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.ComposeAnimations">
+
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,6 +47,7 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
         </activity>
     </application>
 

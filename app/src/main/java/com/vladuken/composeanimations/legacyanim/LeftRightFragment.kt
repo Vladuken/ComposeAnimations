@@ -53,13 +53,13 @@ class LeftRightFragment : Fragment() {
             animy.spring.stiffness = SpringForce.STIFFNESS_VERY_LOW
 
             topLeftButton.setOnClickListener {
-                animx.animateToFinalPosition(0f)
-                animy.animateToFinalPosition(0f)
+                animx.animateToFinalPosition(40f)
+                animy.animateToFinalPosition(40f)
             }
 
             topRightButton.setOnClickListener {
-                animx.animateToFinalPosition((view.width - rect.width).toFloat())
-                animy.animateToFinalPosition(0f)
+                animx.animateToFinalPosition((view.width - rect.width - 40f).toFloat())
+                animy.animateToFinalPosition(40f)
             }
         }
     }
