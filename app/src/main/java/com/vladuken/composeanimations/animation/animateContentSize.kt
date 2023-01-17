@@ -1,5 +1,6 @@
 package com.vladuken.composeanimations.animation
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
