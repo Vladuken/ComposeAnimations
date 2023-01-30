@@ -77,18 +77,8 @@ fun AnimationSpecScreen() {
         SpringExamples(fraction)
 
 //        //keyframes
-//        AnimationSpecExample(
-//            fraction = fraction,
-//            animationSpec = keyframes {
-//                val durationStep = 10
-//                durationMillis = durationStep * 100
-//                0.0f at 0 with LinearOutSlowInEasing // for 0-15 ms
-//                0.4f at durationStep * 10 // ms
-//                0.6f at durationStep * 35 // ms
-//                0.2f at durationStep * 60 // ms
-//                0.6f at durationStep * 80 // ms
-//            }
-//        )
+        KeyFrameExample(fraction)
+        
 //        // Repeatable
 //        AnimationSpecExample(
 //            fraction = fraction,
@@ -115,6 +105,25 @@ fun AnimationSpecScreen() {
 //            )
 //        )
     }
+}
+
+@Composable
+private fun KeyFrameExample(fraction: Float) {
+    val keyframeAnimations by createAnimation(
+        fraction = fraction,
+        animationSpec = keyframes {
+            val durationStep = 25
+            durationMillis = durationStep * 100
+            0.0f at 0 with LinearOutSlowInEasing // for 0-15 ms
+            0.4f at durationStep * 10 // ms
+            0.6f at durationStep * 35 // ms
+            0.2f at durationStep * 60 // ms
+            0.6f at durationStep * 80 // ms
+        }
+    )
+    AnimationSpecExample(
+        fraction = keyframeAnimations,
+    )
 }
 
 @Composable
