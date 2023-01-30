@@ -112,6 +112,7 @@ fun AnimationDebugString(
     @FloatRange(from = 0.0, to = 1.0) fraction: Float,
     text: String? = null,
     baserFraction: Float = 0.7f,
+    pinColor: Color = Color.DarkGray
 ) {
     Column(
         modifier = modifier
@@ -142,7 +143,7 @@ fun AnimationDebugString(
                     .offset(x = maxWidth * fraction * baserFraction),
                 shape = RoundedCornerShape(4.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = Color.DarkGray
+                    containerColor = pinColor
                 )
             ) {}
         }
