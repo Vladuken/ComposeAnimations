@@ -3,8 +3,6 @@ package com.vladuken.composeanimations.animation
 import androidx.annotation.FloatRange
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Easing
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,8 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -115,7 +111,7 @@ fun AnimationDebugString(
     modifier: Modifier = Modifier,
     @FloatRange(from = 0.0, to = 1.0) fraction: Float,
     text: String? = null,
-    baserFraction: Float = 0.7f,
+    baserFraction: Float = 0.8f,
     pinColor: Color = Color.DarkGray
 ) {
     Column(
@@ -134,17 +130,20 @@ fun AnimationDebugString(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.CenterStart
         ) {
+            val startOffset = maxWidth * (1f - baserFraction)
             Spacer(
                 modifier = Modifier
-                    .fillMaxWidth(baserFraction)
+                    .padding(horizontal = startOffset)
+                    .fillMaxWidth()
                     .height(4.dp)
                     .alpha(0.2f)
                     .background(Color.Gray)
             )
+            val pinSize = 16.dp
             Card(
                 modifier = Modifier
-                    .size(16.dp)
-                    .offset(x = maxWidth * fraction * baserFraction),
+                    .size(pinSize)
+                    .offset(x = startOffset + (maxWidth - startOffset * 2) * fraction - pinSize / 2),
                 shape = RoundedCornerShape(4.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = pinColor
@@ -154,7 +153,7 @@ fun AnimationDebugString(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun AnimationDebugStringPreview() {
     AnimationDebugString(

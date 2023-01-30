@@ -1,7 +1,6 @@
 package com.vladuken.composeanimations.animation
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
@@ -13,8 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vladuken.composeanimations.core.EasingGraph
@@ -58,29 +55,11 @@ fun AnimationSpecScreen() {
 
         val duration = 1500
         val fraction = remember(isEnabled) { if (isEnabled) 1f else 0f }
-
         ExampleWithGraphAndEasing(
             duration = duration,
             fraction = fraction
         )
 
-        // Tween
-//
-//        AnimationSpecExample(
-//            fraction = fraction,
-//            animationSpec = tween(
-//                durationMillis = duration,
-//                easing = LinearEasing
-//            )
-//        )
-//
-//        AnimationSpecExample(
-//            fraction = fraction,
-//            animationSpec = tween(
-//                durationMillis = duration,
-//                easing = FastOutSlowInEasing
-//            )
-//        )
 //
 //        AnimationSpecExample(
 //            fraction = fraction,
@@ -89,29 +68,14 @@ fun AnimationSpecScreen() {
 //                easing = CubicBezierEasing(0.61f, -0.79f, 0.73f, 1.59f)
 //            )
 //        )
-//
+
 //        Spacer(
 //            modifier = Modifier
 //                .height(16.dp)
 //                .background(Color.Black)
 //        )
-//        // Spring
-//        val reallySlowStiffness = 15f
-//        AnimationSpecExample(
-//            fraction = fraction,
-//            animationSpec = spring(
-//                stiffness = reallySlowStiffness
-//            )
-//        )
-//
-//        AnimationSpecExample(
-//            fraction = fraction,
-//            animationSpec = spring(
-//                dampingRatio = Spring.DampingRatioHighBouncy,
-//                stiffness = reallySlowStiffness
-//            )
-//        )
-//
+        SpringExamples(fraction)
+
 //        //keyframes
 //        AnimationSpecExample(
 //            fraction = fraction,
@@ -150,6 +114,57 @@ fun AnimationSpecScreen() {
 //                delayMillis = 1000
 //            )
 //        )
+    }
+}
+
+@Composable
+private fun SpringExamples(fraction: Float) {
+    val noBouncy by createAnimation(
+        fraction = fraction,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioNoBouncy,
+            stiffness = Spring.StiffnessVeryLow
+        )
+    )
+    val lowBouncy by createAnimation(
+        fraction = fraction,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioLowBouncy,
+            stiffness = Spring.StiffnessVeryLow
+        )
+    )
+    val mediumBouncy by createAnimation(
+        fraction = fraction,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessVeryLow
+        )
+    )
+    val highBouncy by createAnimation(
+        fraction = fraction,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioHighBouncy,
+            stiffness = Spring.StiffnessVeryLow
+        )
+    )
+    Column {
+        val baseFraction = 0.72f
+        AnimationSpecExample(
+            fraction = noBouncy,
+            baseFraction = baseFraction
+        )
+        AnimationSpecExample(
+            fraction = lowBouncy,
+            baseFraction = baseFraction
+        )
+        AnimationSpecExample(
+            fraction = mediumBouncy,
+            baseFraction = baseFraction
+        )
+        AnimationSpecExample(
+            fraction = highBouncy,
+            baseFraction = baseFraction
+        )
     }
 }
 
@@ -193,7 +208,7 @@ private fun ExampleWithGraphAndEasing(duration: Int, fraction: Float) {
 @Composable
 private fun createAnimation(
     fraction: Float,
-    animationSpec: AnimationSpec<Float> = tween(1000),
+    animationSpec: AnimationSpec<Float>,
 ): State<Float> {
     return animateFloatAsState(
         targetValue = fraction,
