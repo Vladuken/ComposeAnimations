@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.vladuken.composeanimations.core.EasingGraph
 
 
 @Composable
@@ -58,38 +59,9 @@ fun AnimationSpecScreen() {
         val duration = 1500
         val fraction = remember(isEnabled) { if (isEnabled) 1f else 0f }
 
-        val colors: List<Color> = listOf(
-            Color.Blue,
-            Color.Red,
-            Color.Cyan
-        )
-
-        val tweens = listOf(
-            tween(duration, easing = FastOutSlowInEasing),
-            tween<Float>(duration, easing = LinearEasing),
-        )
-
-        tweens.forEachIndexed { index, tweenSpec ->
-            val animatedFraction by createAnimation(
-                fraction = fraction,
-                animationSpec = tweenSpec
-            )
-            AnimationSpecExample(
-                fraction = animatedFraction,
-                pinColor = colors[index]
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        val graphFraction by createAnimation(
-            fraction = fraction,
-            animationSpec = tween(duration, easing = LinearEasing)
-        )
-        EasingGraph(
-            currentFraction = graphFraction,
-            easings = tweens.map { it.easing },
-            colors = colors
+        ExampleWithGraphAndEasing(
+            duration = duration,
+            fraction = fraction
         )
 
         // Tween
@@ -182,6 +154,43 @@ fun AnimationSpecScreen() {
 }
 
 @Composable
+private fun ExampleWithGraphAndEasing(duration: Int, fraction: Float) {
+    val colors: List<Color> = listOf(
+        Color.Blue,
+        Color.Red,
+        Color.Cyan
+    )
+
+    val tweens = listOf(
+        tween(duration, easing = FastOutSlowInEasing),
+        tween<Float>(duration, easing = LinearEasing),
+    )
+
+    tweens.forEachIndexed { index, tweenSpec ->
+        val animatedFraction by createAnimation(
+            fraction = fraction,
+            animationSpec = tweenSpec
+        )
+        AnimationSpecExample(
+            fraction = animatedFraction,
+            pinColor = colors[index]
+        )
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    val graphFraction by createAnimation(
+        fraction = fraction,
+        animationSpec = tween(duration, easing = LinearEasing)
+    )
+    EasingGraph(
+        currentFraction = graphFraction,
+        easings = tweens.map { it.easing },
+        colors = colors
+    )
+}
+
+@Composable
 private fun createAnimation(
     fraction: Float,
     animationSpec: AnimationSpec<Float> = tween(1000),
@@ -205,69 +214,6 @@ fun AnimationSpecExample(
         pinColor = pinColor,
         baserFraction = baseFraction
     )
-}
-
-@Composable
-fun EasingGraph(
-    modifier: Modifier = Modifier,
-    currentFraction: Float,
-    easings: List<Easing>,
-    colors: List<Color>
-) {
-    val path by remember { mutableStateOf(Path()) }
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "t",
-            style = MaterialTheme.typography.bodySmall
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Canvas(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .aspectRatio(2f)
-            ) {
-                // Draw Axis
-                path.reset()
-                path.lineTo(0f, size.height)
-                path.lineTo(size.width, size.height)
-                drawPath(
-                    path = path,
-                    color = Color.LightGray,
-                    style = Stroke(width = 3f),
-                )
-
-                // Draw function
-                easings.forEachIndexed { index, easing ->
-                    path.reset()
-                    path.moveTo(0f, size.height)
-                    generateSequence(0f) { it + 0.01f }
-                        .takeWhile { it <= currentFraction }
-                        .forEach {
-                            path.lineTo(
-                                size.width * easing.transform(it),
-                                size.height - size.height * it
-                            )
-                        }
-
-                    drawPath(
-                        path = path,
-                        color = colors[index],
-                        style = Stroke(width = 4f),
-                    )
-                }
-            }
-            Text(
-                text = "x",
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-    }
-
 }
 
 @Preview(
