@@ -55,10 +55,10 @@ fun AnimationSpecScreen() {
 
         val duration = 1500
         val fraction = remember(isEnabled) { if (isEnabled) 1f else 0f }
-        ExampleWithGraphAndEasing(
-            duration = duration,
-            fraction = fraction
-        )
+//        ExampleWithGraphAndEasing(
+//            duration = duration,
+//            fraction = fraction
+//        )
 
 //
 //        AnimationSpecExample(
@@ -74,51 +74,67 @@ fun AnimationSpecScreen() {
 //                .height(16.dp)
 //                .background(Color.Black)
 //        )
-        SpringExamples(fraction)
+//        SpringExamples(fraction)
 
 //        //keyframes
+        // TODO
         KeyFrameExample(fraction)
-        
+
+
+        // TODO
+        val repeatableAnimation by createAnimation(
+            fraction = fraction, animationSpec = repeatable(
+                iterations = 3,
+                animation = tween(1000)
+            )
+        )
+
+        val infiniteRepeatable by createAnimation(
+            fraction = fraction,
+            animationSpec = infiniteRepeatable(
+                animation = tween(1000)
+            )
+        )
 //        // Repeatable
+        AnimationSpecExample(
+            fraction = repeatableAnimation,
+        )
 //        AnimationSpecExample(
-//            fraction = fraction,
-//            animationSpec = repeatable(
-//                iterations = 5,
-//                animation = tween(1000)
-//            )
-//        )
-//
-//        // TODO Сделать что-то с infiniteRepeatable
-//        AnimationSpecExample(
-//            fraction = fraction,
-//            animationSpec = infiniteRepeatable(
-//                animation = tween(1000),
-//                repeatMode = RepeatMode.Restart
-//            )
+//            fraction = infiniteRepeatable,
 //        )
 //
 //        // Snap
-//        AnimationSpecExample(
-//            fraction = fraction,
-//            animationSpec = snap(
-//                delayMillis = 1000
-//            )
-//        )
+        //TODO
+        val snap by createAnimation(
+            fraction = fraction,
+            animationSpec = snap(
+                delayMillis = 1000
+            )
+        )
+        AnimationSpecExample(
+            fraction = snap,
+        )
     }
 }
 
+//TODO Create Example with keyframes
 @Composable
 private fun KeyFrameExample(fraction: Float) {
     val keyframeAnimations by createAnimation(
         fraction = fraction,
         animationSpec = keyframes {
-            val durationStep = 25
-            durationMillis = durationStep * 100
-            0.0f at 0 with LinearOutSlowInEasing // for 0-15 ms
-            0.4f at durationStep * 10 // ms
-            0.6f at durationStep * 35 // ms
-            0.2f at durationStep * 60 // ms
-            0.6f at durationStep * 80 // ms
+//            val durationStep = 25
+//            durationMillis = durationStep * 100
+//            0.4f at durationStep * 10 // ms
+//            0.6f at durationStep * 35 // ms
+//            0.2f at durationStep * 60 // ms
+//            0.7f at durationStep * 80 // ms
+
+            durationMillis = 2000
+            0.0f atFraction 0f with LinearOutSlowInEasing // for 0-15 ms
+            0.2f atFraction 0.25f with FastOutLinearInEasing // for 15-75 ms
+            0.4f atFraction 0.5f // ms
+            0.4f atFraction 0.7f // ms
         }
     )
     AnimationSpecExample(
