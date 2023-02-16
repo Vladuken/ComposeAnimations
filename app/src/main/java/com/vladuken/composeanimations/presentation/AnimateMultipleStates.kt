@@ -12,7 +12,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +30,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.vladuken.composeanimations.animation.ShowHideButton
 
+/**
+ * Animate With animateAsState()
+ */
 @Composable
 fun AnimateMultipleStates(
     animationDuration: Int = 500
@@ -43,7 +50,9 @@ fun AnimateMultipleStates(
         if (active) 60.dp else 150.dp, animationSpec = tween(animationDuration)
     )
 
-    ComponentWithButtonAndCube(active, color, size, rotation)
+    ComponentWithButtonAndCube(active, color, size, rotation) {
+        active = !active
+    }
 }
 
 
@@ -76,21 +85,90 @@ fun AnimateMultipleTransitionStates() {
         if (it) 60.dp else 150.dp
     }
 
-    ComponentWithButtonAndCube(active, color, size, rotation)
+    ComponentWithButtonAndCube(active, color, size, rotation) {
+        active = !active
+    }
 }
 
 /**
- * Helper composable
+ * Encapsulate Transition
+ * TODO Improve For Video
+ */
+@Composable
+fun EncapsulateTransitionStates() {
+    var active by remember { mutableStateOf(true) }
+    val transition = updateTransitionData(active)
+    Column(
+        modifier = Modifier.size(400.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ShowHideButton(
+            visible = active,
+            onClick = { active = !active }
+        )
+        AnimatedIcon(
+            color = transition.color.value,
+            size = transition.size.value,
+            rotation = transition.rotation.value,
+        )
+    }
+}
+
+private data class AnimState(
+    val rotation: State<Rotation>,
+    val size: State<Dp>,
+    val color: State<Color>
+)
+
+@Composable
+private fun updateTransitionData(isActive: Boolean): AnimState {
+    val transition = updateTransition(
+        label = "Animate Size",
+        targetState = isActive
+    )
+
+    val color = transition.animateColor(
+        label = "Animate Color",
+        transitionSpec = { tween(500) }
+    ) { state ->
+        if (state) Color.Red else Color.Blue
+    }
+    val size = transition.animateDp(
+        label = "Animate Size",
+        transitionSpec = { tween(500) }
+    ) { state ->
+        if (state) 60.dp else 150.dp
+    }
+    val rotation = transition.animateValue(
+        label = "Animate Rotation",
+        transitionSpec = { tween(500) },
+        typeConverter = RotationConverter
+    ) { state ->
+        when (state) {
+            true -> Rotation(0f)
+            false -> Rotation(180f)
+        }
+    }
+
+    return remember(transition) { AnimState(rotation, size, color) }
+}
+
+/**
+ * Example Helpers
  */
 @Composable
 private fun ComponentWithButtonAndCube(
-    active: Boolean, color: Color, size: Dp, rotation: Rotation
+    active: Boolean,
+    color: Color,
+    size: Dp,
+    rotation: Rotation,
+    toggle: () -> Unit = {}
 ) {
-    var active1 = active
     Column(
-        modifier = Modifier.size(400.dp), horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.size(400.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ShowHideButton(visible = active1, onClick = { active1 = !active1 })
+        ShowHideButton(visible = active, onClick = toggle)
         AnimatedSquare(
             color = color,
             size = size,
@@ -101,7 +179,9 @@ private fun ComponentWithButtonAndCube(
 
 @Composable
 private fun AnimatedSquare(
-    color: Color = Color.Red, rotation: Rotation = Rotation(0f), size: Dp = 60.dp
+    color: Color = Color.Red,
+    rotation: Rotation = Rotation(0f),
+    size: Dp = 60.dp
 ) {
     Box(
         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
@@ -115,6 +195,30 @@ private fun AnimatedSquare(
     }
 }
 
+@Composable
+private fun AnimatedIcon(
+    color: Color = Color.Red,
+    rotation: Rotation = Rotation(0f),
+    size: Dp = 60.dp
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            modifier = Modifier
+                .size(size)
+                .rotate(rotation.value),
+            imageVector = Icons.Default.Settings,
+            contentDescription = null,
+            tint = color
+        )
+    }
+}
+
+/**
+ * Previews
+ */
 @Preview(
     showBackground = true, backgroundColor = 0x00_FF_FF_FF
 )
@@ -123,5 +227,16 @@ fun AnimateMultipleStatesPreview() {
     Column {
         AnimateMultipleStates()
         AnimateMultipleTransitionStates()
+    }
+}
+
+@Preview(
+    showBackground = true,
+    backgroundColor = 0x00_FF_FF_FF
+)
+@Composable
+fun AnimateEncapsulation() {
+    Column {
+        EncapsulateTransitionStates()
     }
 }
