@@ -323,7 +323,7 @@ private fun createAnimation(
 }
 
 @Composable
-fun AnimationSpecExample(
+private fun AnimationSpecExample(
     modifier: Modifier = Modifier,
     fraction: Float,
     pinColor: Color = Color.DarkGray,

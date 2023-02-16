@@ -52,7 +52,7 @@ private val ANIMATION: Animation<Dp, AnimationVector1D> = TargetBasedAnimation(
 //    animationSpec = exponentialDecay(),
 //    typeConverter = Dp.VectorConverter,
 //    initialValue = 0.dp,
-//    initialVelocityVector = AnimationVector1D(400f)
+//    initialVelocity = 400.dp
 //)
 
 @Composable
