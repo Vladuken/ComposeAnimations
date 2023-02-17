@@ -20,6 +20,7 @@ import com.vladuken.composeanimations.animation.AnimatedContentSizeScreen
 import com.vladuken.composeanimations.animation.AnimatedVisibilityScreen
 import com.vladuken.composeanimations.animation.AnimationSamplesScreen
 import com.vladuken.composeanimations.animation.AnimationSpot
+import com.vladuken.composeanimations.animation.TransitionElement
 import com.vladuken.composeanimations.ui.theme.ComposeAnimationsTheme
 
 class MainActivity : ComponentActivity() {
@@ -32,7 +33,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AnimationsScreen()
+                    TransitionElement()
                 }
             }
         }
