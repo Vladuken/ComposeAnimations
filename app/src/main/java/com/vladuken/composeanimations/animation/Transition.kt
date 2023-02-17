@@ -15,6 +15,11 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.with
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -31,12 +36,13 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -90,15 +96,18 @@ fun CameraComponent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CameraIcon(
-            modifier = modifier.weight(1f),
-            transition.createChildTransition {
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f),
+            transition = transition.createChildTransition {
                 when (it) {
-                    CameraState.Camera -> Icons.Default.ArrowDropDown
-                    CameraState.Video -> Icons.Default.Phone
+                    CameraState.Camera -> Icons.Default.AccountCircle
+                    CameraState.Video -> Icons.Default.PlayArrow
                     CameraState.Portrait -> Icons.Default.Face
                 }
             }
         )
+        Spacer(modifier = Modifier.weight(1f))
         ZoomSelector(
             modifier = Modifier.padding(
                 top = 8.dp,
@@ -182,9 +191,16 @@ private fun CameraIcon(
     transition: Transition<ImageVector>
 ) {
     transition.AnimatedContent(
-        modifier = modifier
+        transitionSpec = {
+            slideInVertically() + fadeIn() + scaleIn() with
+                    slideOutVertically() + fadeOut() + scaleOut()
+        }
     ) {
-        Icon(imageVector = it, contentDescription = null)
+        Icon(
+            modifier = modifier,
+            imageVector = it,
+            contentDescription = null
+        )
     }
 }
 
@@ -201,7 +217,7 @@ fun CameraButton(
         modifier = modifier
             .clip(CircleShape)
             .aspectRatio(1f)
-            .background(Color.White.copy(alpha = 0.5f))
+            .background(Color.White.copy(alpha = 0.3f))
             .border(2.dp, color, CircleShape),
         contentAlignment = Alignment.Center
     ) {
@@ -310,10 +326,11 @@ fun <T : Any> SelectorHelper(
         ) {
             items(itemWithSelectedItem) { (item, isSelected) ->
                 Card(
-                    modifier = Modifier.clickable { itemSelected(item) },
+                    modifier = Modifier
+                        .clickable { itemSelected(item) },
                     colors = CardDefaults.cardColors(
                         if (isSelected) {
-                            Color.White.copy(alpha = 0.8f)
+                            MaterialTheme.colorScheme.background
                         } else {
                             Color.Transparent
                         }
