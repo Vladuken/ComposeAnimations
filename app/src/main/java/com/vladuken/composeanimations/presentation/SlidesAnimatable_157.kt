@@ -8,9 +8,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.vladuken.composeanimations.animation.AnimationDebugString
+import kotlinx.coroutines.delay
 
 @Composable
-private fun InfiniteLineAnimation(
+fun InfiniteLineAnimation(
     modifier: Modifier = Modifier
 ) {
     val animatable = remember { Animatable(0f) }

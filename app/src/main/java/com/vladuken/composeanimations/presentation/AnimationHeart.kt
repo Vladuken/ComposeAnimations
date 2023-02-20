@@ -8,6 +8,7 @@ import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,7 +53,7 @@ private val ANIMATION: Animation<Dp, AnimationVector1D> = TargetBasedAnimation(
 //    animationSpec = exponentialDecay(),
 //    typeConverter = Dp.VectorConverter,
 //    initialValue = 0.dp,
-//    initialVelocity = 400.dp
+//    initialVelocity = 500.dp
 //)
 
 @Composable
@@ -136,7 +137,10 @@ private fun HeartWithSizeAndTime(
             Icon(
                 modifier = Modifier
                     .size(currentState)
-                    .clickable { onClick() },
+                    .clickable(
+                        remember { MutableInteractionSource() },
+                        indication = null
+                    ) { onClick() },
                 imageVector = Icons.Default.Favorite,
                 contentDescription = null,
                 tint = Color.Red

@@ -10,11 +10,15 @@ import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -28,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.vladuken.composeanimations.animation.ShowHideButton
 
 /**
@@ -106,11 +111,24 @@ fun EncapsulateTransitionStates() {
             visible = active,
             onClick = { active = !active }
         )
-        AnimatedIcon(
-            color = transition.color.value,
-            size = transition.size.value,
-            rotation = transition.rotation.value,
-        )
+        Row(
+            modifier = Modifier.weight(1f)
+                .padding(horizontal = 80.dp)
+        ) {
+            AnimatedSquare(
+                modifier = Modifier.weight(1f),
+                color = transition.color.value,
+                size = transition.size.value,
+                rotation = transition.rotation.value,
+            )
+            AnimatedIcon(
+                modifier = Modifier.weight(1f),
+                color = transition.color.value,
+                size = transition.size.value,
+                rotation = transition.rotation.value,
+            )
+        }
+
     }
 }
 
@@ -179,12 +197,13 @@ private fun ComponentWithButtonAndCube(
 
 @Composable
 private fun AnimatedSquare(
+    modifier: Modifier = Modifier,
     color: Color = Color.Red,
     rotation: Rotation = Rotation(0f),
     size: Dp = 60.dp
 ) {
     Box(
-        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+        modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
         Box(
             modifier = Modifier
@@ -197,12 +216,13 @@ private fun AnimatedSquare(
 
 @Composable
 private fun AnimatedIcon(
+    modifier: Modifier = Modifier,
     color: Color = Color.Red,
     rotation: Rotation = Rotation(0f),
     size: Dp = 60.dp
 ) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Icon(

@@ -27,6 +27,7 @@ fun EasingGraph(
 ) {
     val path by remember { mutableStateOf(Path()) }
     Row(
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
