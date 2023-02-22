@@ -8,6 +8,11 @@ import androidx.compose.animation.core.spring
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 
+@JvmInline
+value class Rotation(
+    val value: Float
+)
+
 @Composable
 fun animateRotationAsState(
     targetValue: Rotation,
