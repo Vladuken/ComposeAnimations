@@ -1,4 +1,4 @@
-package com.vladuken.composeanimations.core
+package com.vladuken.composeanimations.api.core
 
 import androidx.compose.animation.core.Easing
 import androidx.compose.foundation.Canvas

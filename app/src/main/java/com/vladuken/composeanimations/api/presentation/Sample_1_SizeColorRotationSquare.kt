@@ -1,4 +1,4 @@
-package com.vladuken.composeanimations.presentation
+package com.vladuken.composeanimations.api.presentation
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.animateColorAsState
@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -32,8 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.vladuken.composeanimations.animation.ShowHideButton
+import com.vladuken.composeanimations.api.core.ShowHideButton
 
 /**
  * Animate With animateAsState()
@@ -112,7 +109,8 @@ fun EncapsulateTransitionStates() {
             onClick = { active = !active }
         )
         Row(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
                 .padding(horizontal = 80.dp)
         ) {
             AnimatedSquare(

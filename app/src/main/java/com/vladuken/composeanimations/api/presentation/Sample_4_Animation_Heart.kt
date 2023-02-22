@@ -1,11 +1,9 @@
-package com.vladuken.composeanimations.presentation
+package com.vladuken.composeanimations.api.presentation
 
 import androidx.compose.animation.core.Animation
 import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.animation.core.DecayAnimation
 import androidx.compose.animation.core.TargetBasedAnimation
 import androidx.compose.animation.core.VectorConverter
-import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

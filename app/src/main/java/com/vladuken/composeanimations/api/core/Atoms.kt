@@ -1,4 +1,4 @@
-package com.vladuken.composeanimations.animation
+package com.vladuken.composeanimations.api.core
 
 import androidx.annotation.FloatRange
 import androidx.compose.animation.AnimatedVisibility
@@ -41,7 +41,7 @@ fun ShowHideButton(
 
 
 @Composable
-fun AnimationSpot(
+fun AnimationSlot(
     modifier: Modifier = Modifier,
     title: String,
     content: @Composable () -> Unit
@@ -107,7 +107,7 @@ fun AnimationSpot(
 }
 
 @Composable
-fun AnimationDebugString(
+fun AnimationLineString(
     modifier: Modifier = Modifier,
     @FloatRange(from = 0.0, to = 1.0) fraction: Float,
     text: String? = null,
@@ -153,10 +153,22 @@ fun AnimationDebugString(
     }
 }
 
+@Composable
+fun GroupHeader(heading: String) {
+    Text(
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .fillMaxWidth(),
+        text = heading,
+        style = MaterialTheme.typography.titleMedium,
+        textAlign = TextAlign.Center
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
-fun AnimationDebugStringPreview() {
-    AnimationDebugString(
+fun AnimationLineStringPreview() {
+    AnimationLineString(
         text = "Some Temple Text",
         fraction = 0.5f
     )
@@ -164,8 +176,8 @@ fun AnimationDebugStringPreview() {
 
 @Preview
 @Composable
-fun AnimationSpotPreview() {
-    AnimationSpot(title = "Test Title") {
+fun AnimationSlotPreview() {
+    AnimationSlot(title = "Test Title") {
         Text(text = "Content")
     }
 }

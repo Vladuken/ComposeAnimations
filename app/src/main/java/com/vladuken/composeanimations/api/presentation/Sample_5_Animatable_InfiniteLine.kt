@@ -1,4 +1,4 @@
-package com.vladuken.composeanimations.presentation
+package com.vladuken.composeanimations.api.presentation
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -7,8 +7,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.vladuken.composeanimations.animation.AnimationDebugString
-import kotlinx.coroutines.delay
+import com.vladuken.composeanimations.api.core.AnimationLineString
 
 @Composable
 fun InfiniteLineAnimation(
@@ -24,7 +23,7 @@ fun InfiniteLineAnimation(
             animatable.snapTo(0f)
         }
     }
-    AnimationDebugString(
+    AnimationLineString(
         modifier = modifier,
         fraction = animatable.value,
     )

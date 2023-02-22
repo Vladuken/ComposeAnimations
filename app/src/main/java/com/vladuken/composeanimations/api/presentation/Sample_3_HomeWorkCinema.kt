@@ -1,4 +1,4 @@
-package com.vladuken.composeanimations.presentation
+package com.vladuken.composeanimations.api.presentation
 
 import androidx.compose.animation.core.Transition
 import androidx.compose.animation.core.animateIntOffset
@@ -44,7 +44,7 @@ private enum class Location {
     CINEMA,
 }
 
-fun IntOffset.toPersonOffset(
+private fun IntOffset.toPersonOffset(
     smallSize: Int,
     personSize: Int
 ): IntOffset {
@@ -77,7 +77,8 @@ fun HomeWorkCinemaWithView() {
         }
 
         val transition = updateTransition(
-            targetState = currentState
+            targetState = currentState,
+            label = "Parent Transition",
         )
         CanvasAnimations(
             transition = transition
