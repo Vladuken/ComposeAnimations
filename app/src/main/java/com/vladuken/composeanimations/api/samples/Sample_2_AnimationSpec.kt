@@ -1,4 +1,4 @@
-package com.vladuken.composeanimations.animation
+package com.vladuken.composeanimations.api.samples
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.FastOutLinearInEasing
@@ -14,6 +14,7 @@ import androidx.compose.animation.core.repeatable
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,53 +46,47 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.vladuken.composeanimations.core.EasingGraph
+import com.vladuken.composeanimations.api.core.AnimationLineString
+import com.vladuken.composeanimations.api.core.EasingGraph
+import com.vladuken.composeanimations.api.core.GroupHeader
 
 
 @Composable
-fun AnimationSpecScreen() {
+fun AnimationSpecScreen(
+    modifier: Modifier = Modifier,
+) {
+
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(
-                horizontal = 24.dp,
-                vertical = 32.dp
-            )
+        modifier = modifier
     ) {
         var isEnabled by remember { mutableStateOf(false) }
-
         ToggleButtonWithArrow(isEnabled) { isEnabled = !isEnabled }
         Spacer(modifier = Modifier.height(16.dp))
-        val fraction = remember(isEnabled) { if (isEnabled) 1f else 0f }
 
-        GroupHeader("Easing")
-        GraphAndEasingExample(fraction)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(0.dp)
+        ) {
+            val fraction = remember(isEnabled) { if (isEnabled) 1f else 0f }
 
-        GroupHeader("Spring")
-        SpringExamples(fraction)
+            GroupHeader("Tween + Easing")
+            GraphAndEasingExample(fraction)
 
-        GroupHeader("KeyFrames")
-        KeyFrameExample(fraction)
+            GroupHeader("Spring")
+            SpringExamples(fraction)
 
-        GroupHeader("Repeatable")
-        RepeatableExample(fraction)
+            GroupHeader("KeyFrames")
+            KeyFrameExample(fraction)
 
-        GroupHeader("Snap")
-        SnapExample(fraction)
+            GroupHeader("Repeatable")
+            RepeatableExample(fraction)
+
+            GroupHeader("Snap")
+            SnapExample(fraction)
+        }
     }
-}
-
-@Composable
-private fun GroupHeader(heading: String) {
-    Text(
-        modifier = Modifier
-            .padding(vertical = 8.dp)
-            .fillMaxWidth(),
-        text = heading,
-        style = MaterialTheme.typography.titleMedium,
-        textAlign = TextAlign.Center
-    )
 }
 
 @Composable
@@ -150,7 +145,6 @@ private fun ToggleButtonWithArrow(
             }
         }
     }
-
 }
 
 @Composable
@@ -329,7 +323,7 @@ private fun AnimationSpecExample(
     pinColor: Color = Color.DarkGray,
     baseFraction: Float = 1f
 ) {
-    AnimationDebugString(
+    AnimationLineString(
         modifier = modifier,
         fraction = fraction,
         pinColor = pinColor,

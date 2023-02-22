@@ -1,4 +1,4 @@
-package com.vladuken.composeanimations.presentation
+package com.vladuken.composeanimations.api.presentation
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.AnimationVector1D

@@ -1,13 +1,15 @@
 @file:OptIn(ExperimentalAnimationApi::class)
 
-package com.vladuken.composeanimations.animation
+package com.vladuken.composeanimations.api.samples
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -19,48 +21,49 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.vladuken.composeanimations.api.core.ShowHideButton
 
 const val HELLO_ANDROID = "Hello Android"
 
 @Composable
-fun AnimatedVisibilitySample(
-    modifier: Modifier = Modifier,
-    isVisible: Boolean,
-    text: String = HELLO_ANDROID,
-    enter: EnterTransition,
-    exit: ExitTransition,
+fun AnimatedVisibilityScreen(
+    modifier: Modifier = Modifier
 ) {
-    AnimatedVisibility(
-        modifier = modifier,
-        visible = isVisible,
-        enter = enter,
-        exit = exit
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.headlineLarge
-        )
+        // AnimatedVisibility : Basics
+        AnimationBasics()
+        // AnimatedVisibility + MutableTransitionState
+        AnimationWithMutableTransitionState()
+        // AnimatedVisibility + Modifier for children
+        AnimatedVisibilityWithChildren()
+        // AnimatedVisibility + AnimationSpec + plus()
+        AnimatedVisibilityPlusExample()
     }
 }
 
 @Composable
-fun AnimatedVisibilityTransitionState(
-    modifier: Modifier = Modifier,
-    isVisible: MutableTransitionState<Boolean>,
-    text: String = HELLO_ANDROID,
-    enter: EnterTransition,
-    exit: ExitTransition,
-) {
-    AnimatedVisibility(
-        visibleState = isVisible,
-        modifier = modifier,
-        enter = enter,
-        exit = exit
+private fun AnimationBasics() {
+    var visible by remember { mutableStateOf(true) }
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.headlineLarge
+        ShowHideButton(
+            visible = visible,
+            onClick = { visible = !visible }
         )
+        // Simple FadeIn/Out
+        FadeSimple(visible)
+        // FadeIn/Out with SlideIn/Out
+        FadeWithSlide(visible)
+        // Custom Offset SlideIn/Out
+        FadeWithSliceCustomOffset(visible)
     }
 }
 
@@ -96,6 +99,30 @@ private fun FadeWithSliceCustomOffset(visible: Boolean) {
     )
 }
 
+/**
+ * Composable helper function - AnimatedVisibility wrapper
+ */
+@Composable
+private fun AnimatedVisibilitySample(
+    modifier: Modifier = Modifier,
+    isVisible: Boolean,
+    text: String = HELLO_ANDROID,
+    enter: EnterTransition,
+    exit: ExitTransition,
+) {
+    AnimatedVisibility(
+        modifier = modifier,
+        visible = isVisible,
+        enter = enter,
+        exit = exit
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.headlineLarge
+        )
+    }
+}
+
 @Composable
 private fun AnimationWithMutableTransitionState() {
     val state = remember { MutableTransitionState(true) }
@@ -110,25 +137,50 @@ private fun AnimationWithMutableTransitionState() {
         state.isIdle && !state.currentState -> Color.Red
         else -> error("Illegal State $state")
     }
-    ShowHideButton(
-        visible = state.currentState,
-        onClick = { state.targetState = !state.targetState },
-        colors = ButtonDefaults.buttonColors(
-            containerColor = color,
-            contentColor = Color.Black
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ShowHideButton(
+            visible = state.currentState,
+            onClick = { state.targetState = !state.targetState },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = color,
+                contentColor = Color.Black
+            )
         )
-    )
-    AnimatedVisibilityTransitionState(
-        isVisible = state,
-        enter = fadeIn() + slideInHorizontally { -it * 2 },
-        exit = fadeOut() + slideOutHorizontally { it * 2 },
-    )
+        AnimatedVisibilityTransitionState(
+            isVisible = state,
+            enter = fadeIn() + slideInHorizontally { -it * 2 },
+            exit = fadeOut() + slideOutHorizontally { it * 2 },
+        )
+    }
 }
 
+@Composable
+private fun AnimatedVisibilityTransitionState(
+    modifier: Modifier = Modifier,
+    isVisible: MutableTransitionState<Boolean>,
+    text: String = HELLO_ANDROID,
+    enter: EnterTransition,
+    exit: ExitTransition,
+) {
+    AnimatedVisibility(
+        visibleState = isVisible,
+        modifier = modifier,
+        enter = enter,
+        exit = exit
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.headlineLarge
+        )
+    }
+}
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AnimatedVisibilityWithChildren(
+private fun AnimatedVisibilityWithChildren(
     modifier: Modifier = Modifier,
 ) {
     var visible by remember { mutableStateOf(true) }
@@ -180,60 +232,6 @@ fun AnimatedVisibilityWithChildren(
     }
 }
 
-
-@Composable
-fun AnimatedVisibilityScreen() {
-    Column(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        var visible by remember { mutableStateOf(true) }
-        ShowHideButton(
-            visible = visible,
-            onClick = { visible = !visible }
-        )
-        // Simple FadeIn/Out
-        /**
-         * Здесь можно начать с рассказа о том, как сделать самую простую анимацию с AnimatedVisibility
-         */
-        FadeSimple(visible)
-        // FadeIn/Out with SlideIn/Out
-        /**
-         * Далее указать, что анимации можно конкатенировать, и таким образом делать свою кастомную анимацию
-         */
-        FadeWithSlide(visible)
-        // Custom Offset SlideIn/Out
-        /**
-         * Слудующий шаг - указать, что для анимаций можно сделать кастомный offset
-         * - В этот же момент можно показать, что анимации в Compose прерываемы:
-         * если их остановить во время выполнения, то они плавно вернутся в исходное положение
-         */
-        FadeWithSliceCustomOffset(visible)
-
-        // MutableTransitionState
-        /**
-         * MutableTransitionState - рассказать про этот стейтхолдер,
-         * который позволяет отслеживать текущее состояние анимации
-         */
-        AnimationWithMutableTransitionState()
-        // AnimatedVisibilityWithChildren
-        /**
-         * Дополнительная возможность AnimatedVisibility - предоставлять Modifier.animateEnterExit,
-         * позволяющий указывать кастомные анимации для children
-         * Собственно, тут можно сказать, что те три анимации, которые мы сделали выше - можно сделать проще
-         */
-        AnimatedVisibilityWithChildren()
-        /**
-         * Далее можно упомянуть что сейчас, когда элемент становится невидимым, он также не занимает место
-         * И чтобы сохранить место - нужно использовать другой способ анимации - плавный переход к animate*AsState
-         */
-        Spacer(modifier = Modifier.height(16.dp))
-        AnimatedVisibilityPlusExample()
-    }
-}
-
 @Composable
 @OptIn(ExperimentalAnimationApi::class)
 private fun AnimatedVisibilityPlusExample() {
@@ -280,7 +278,7 @@ private fun AnimatedVisibilityPlusExample() {
 }
 
 @Composable
-fun AnimatedBox(
+private fun AnimatedBox(
     modifier: Modifier = Modifier,
     isVisible: Boolean,
     enter: EnterTransition,

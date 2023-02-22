@@ -1,6 +1,5 @@
-package com.vladuken.composeanimations.animation
+package com.vladuken.composeanimations.api.samples
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -20,6 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+
+
+@Composable
+fun AnimatedContentSizeScreen(modifier: Modifier = Modifier) {
+    AnimatedContentSizeSample(modifier.fillMaxWidth())
+}
 
 @Composable
 private fun AnimatedContentSizeSample(
@@ -42,18 +47,16 @@ private fun AnimatedContentSizeSample(
             Spacer(modifier = Modifier.weight(1f))
         }
 
-        /**
-         * Пример без .animateContentSize()
-         */
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // No .animateContentSize()
         Row(
             modifier = Modifier.background(Color.Gray)
         ) {
             repeat(count) { Text(text = "***") }
         }
         Spacer(modifier = Modifier.height(8.dp))
-        /**
-         * Пример с .animateContentSize()
-         */
+        // With .animateContentSize()
         Row(
             modifier = Modifier
                 .background(Color.Gray)
@@ -63,12 +66,6 @@ private fun AnimatedContentSizeSample(
         }
     }
 
-}
-
-
-@Composable
-fun AnimatedContentSizeScreen(modifier: Modifier = Modifier) {
-    AnimatedContentSizeSample(modifier.fillMaxWidth())
 }
 
 
