@@ -1,31 +1,24 @@
+@file:OptIn(ExperimentalAnimationApi::class)
+
 package com.vladuken.composeanimations.animation
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
 const val HELLO_ANDROID = "Hello Android"
 
@@ -192,6 +185,7 @@ fun AnimatedVisibilityWithChildren(
 fun AnimatedVisibilityScreen() {
     Column(
         modifier = Modifier
+            .padding(16.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -235,10 +229,91 @@ fun AnimatedVisibilityScreen() {
          * Далее можно упомянуть что сейчас, когда элемент становится невидимым, он также не занимает место
          * И чтобы сохранить место - нужно использовать другой способ анимации - плавный переход к animate*AsState
          */
+        Spacer(modifier = Modifier.height(16.dp))
+        AnimatedVisibilityPlusExample()
     }
 }
 
-@Preview(showBackground = true)
+@Composable
+@OptIn(ExperimentalAnimationApi::class)
+private fun AnimatedVisibilityPlusExample() {
+    var visible by remember { mutableStateOf(false) }
+    val duration = 1500
+    Column {
+        ShowHideButton(
+            visible = visible,
+            onClick = { visible = !visible }
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(32.dp),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            AnimatedBox(
+                isVisible = visible,
+                enter = fadeIn(tween(duration)),
+                exit = fadeOut(tween(duration))
+            )
+            Text(
+                text = "+",
+                style = MaterialTheme.typography.headlineLarge
+            )
+
+            AnimatedBox(
+                isVisible = visible,
+                enter = scaleIn(tween(duration)),
+                exit = scaleOut(tween(duration))
+            )
+            Text(
+                text = "=",
+                style = MaterialTheme.typography.headlineLarge
+            )
+            AnimatedBox(
+                isVisible = visible,
+                enter = fadeIn(tween(duration)) + scaleIn(tween(duration)),
+                exit = fadeOut(tween(duration)) + scaleOut(tween(duration))
+            )
+        }
+    }
+}
+
+@Composable
+fun AnimatedBox(
+    modifier: Modifier = Modifier,
+    isVisible: Boolean,
+    enter: EnterTransition,
+    exit: ExitTransition,
+) {
+
+    Card(
+        modifier = modifier.size(60.dp),
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            androidx.compose.animation.AnimatedVisibility(
+                visible = isVisible,
+                enter = enter,
+                exit = exit
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(50.dp)
+                        .clip(CircleShape)
+                        .background(Color.Blue)
+                )
+            }
+        }
+    }
+}
+
+@Preview(
+    showBackground = true,
+    backgroundColor = 0x00_FF_FF_FF
+)
 @Composable
 fun AnimatedVisibilityScreenPreview() {
     AnimatedVisibilityScreen()
