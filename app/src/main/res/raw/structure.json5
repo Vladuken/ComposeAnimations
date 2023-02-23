@@ -1,0 +1,16 @@
+{
+  Header: {},
+  Design: {},
+  Variables: {},
+  ConstraintSets: {},
+  Transitions: {
+    // Transition Named default (special name)
+    default: {
+      KeyFrames: {
+        KeyPositions: {},
+        KeyAttributes: {},
+        KeyCycles: {},
+      }
+    }
+  }
+}

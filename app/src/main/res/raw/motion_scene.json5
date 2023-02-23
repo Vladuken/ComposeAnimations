@@ -1,0 +1,96 @@
+{
+  Header: {},
+  Design: {},
+  Variables: {},
+  ConstraintSets: {
+    start: {
+      box: {
+        width: 100,
+        height: 100,
+        start: [
+          'parent',
+          'start'
+        ],
+        end: [
+          'parent',
+          'end'
+        ],
+        top: [
+          'parent',
+          'top'
+        ],
+        bottom: [
+          'parent',
+          'bottom'
+        ],
+        custom: {
+          radius: 0
+        }
+      }
+    },
+    end: {
+      box: {
+        width: 200,
+        height: 200,
+        start: [
+          'parent',
+          'start'
+        ],
+        end: [
+          'parent',
+          'end'
+        ],
+        top: [
+          'parent',
+          'top'
+        ],
+        bottom: [
+          'parent',
+          'bottom'
+        ],
+        custom: {
+          radius: 50
+        }
+      }
+    }
+  },
+  Transitions: {
+    // Transition Named default (special name)
+    from: 'start',
+    to: 'end',
+    default: {
+      KeyFrames: {
+        KeyPositions: {},
+        KeyAttributes: {},
+        KeyCycles: {},
+      }
+    }
+  }
+}
+
+
+//width
+//height
+//start
+//end
+//top
+//bottom
+//left
+//right
+//center
+//centerHorizontally
+//centerVertically
+//alpha
+//scaleX
+//scaleY
+//translationX
+//translationY
+//translationZ
+//pivotX
+//pivotY
+//rotationX
+//rotationY
+//rotationZ
+//visibility (= visible, invisible, gone)
+//custom - custom properties
+//motion { ... } - motion properties
