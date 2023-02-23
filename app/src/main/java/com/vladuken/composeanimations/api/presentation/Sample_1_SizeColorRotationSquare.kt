@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
@@ -32,11 +34,25 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.vladuken.composeanimations.api.core.ShowHideButton
 
+
+@Composable
+fun SizeColorRotationSquareScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+    ) {
+        AnimateMultipleStates()
+        AnimateMultipleTransitionStates()
+        EncapsulateTransitionStates()
+    }
+}
+
 /**
  * Animate With animateAsState()
  */
 @Composable
-fun AnimateMultipleStates(
+private fun AnimateMultipleStates(
     animationDuration: Int = 500
 ) {
     var active by remember { mutableStateOf(true) }
@@ -59,7 +75,7 @@ fun AnimateMultipleStates(
 
 
 @Composable
-fun AnimateMultipleTransitionStates() {
+private fun AnimateMultipleTransitionStates() {
     var active by remember { mutableStateOf(true) }
     val transition = updateTransition(
         targetState = active, label = "Parent"
@@ -97,7 +113,7 @@ fun AnimateMultipleTransitionStates() {
  * TODO Improve For Video
  */
 @Composable
-fun EncapsulateTransitionStates() {
+private fun EncapsulateTransitionStates() {
     var active by remember { mutableStateOf(true) }
     val transition = updateTransitionData(active)
     Column(
@@ -111,7 +127,6 @@ fun EncapsulateTransitionStates() {
         Row(
             modifier = Modifier
                 .weight(1f)
-                .padding(horizontal = 80.dp)
         ) {
             AnimatedSquare(
                 modifier = Modifier.weight(1f),
@@ -245,16 +260,6 @@ fun AnimateMultipleStatesPreview() {
     Column {
         AnimateMultipleStates()
         AnimateMultipleTransitionStates()
-    }
-}
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 0x00_FF_FF_FF
-)
-@Composable
-fun AnimateEncapsulation() {
-    Column {
         EncapsulateTransitionStates()
     }
 }

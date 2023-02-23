@@ -55,14 +55,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-enum class CameraState {
+private enum class CameraState {
     Portrait,
     Camera,
     Video
 }
 
 @Composable
-fun TransitionElement(modifier: Modifier = Modifier) {
+fun CameraAnimationScreen(modifier: Modifier = Modifier) {
     var state: CameraState by remember { mutableStateOf(CameraState.Camera) }
 
     Column(
@@ -79,7 +79,7 @@ fun TransitionElement(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CameraComponent(
+private fun CameraComponent(
     modifier: Modifier = Modifier,
     state: CameraState,
     itemSelected: (CameraState) -> Unit,
@@ -203,7 +203,7 @@ private fun CameraIcon(
 }
 
 @Composable
-fun CameraButton(
+private fun CameraButton(
     modifier: Modifier = Modifier,
     transition: Transition<Float>,
     transitionColor: Transition<Color>
@@ -252,7 +252,7 @@ fun ZoomSelector(
 }
 
 @Composable
-fun ModeSelector(
+private fun ModeSelector(
     modifier: Modifier = Modifier,
     modes: List<CameraState>,
     selectedMode: CameraState,
@@ -276,7 +276,7 @@ fun ModeSelector(
 }
 
 @Composable
-fun VideoSelector(
+private fun VideoSelector(
     modifier: Modifier = Modifier,
     transition: Transition<Boolean>
 ) {
@@ -305,7 +305,7 @@ private fun SelectedText(isSelected: Boolean, text: String) {
 }
 
 @Composable
-fun <T : Any> SelectorHelper(
+private fun <T : Any> SelectorHelper(
     modifier: Modifier = Modifier,
     items: List<T>,
     selectedIte: T,
@@ -354,5 +354,5 @@ fun <T : Any> SelectorHelper(
 @Preview(showBackground = true)
 @Composable
 fun TransitionElementPreview() {
-    TransitionElement()
+    CameraAnimationScreen()
 }
