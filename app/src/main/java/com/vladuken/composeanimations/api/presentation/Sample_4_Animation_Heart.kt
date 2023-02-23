@@ -2,8 +2,10 @@ package com.vladuken.composeanimations.api.presentation
 
 import androidx.compose.animation.core.Animation
 import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.DecayAnimation
 import androidx.compose.animation.core.TargetBasedAnimation
 import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -47,15 +49,28 @@ private val ANIMATION: Animation<Dp, AnimationVector1D> = TargetBasedAnimation(
     targetValue = 100.dp
 )
 
-//private val ANIMATION: Animation<Dp, AnimationVector1D> = DecayAnimation(
-//    animationSpec = exponentialDecay(),
-//    typeConverter = Dp.VectorConverter,
-//    initialValue = 0.dp,
-//    initialVelocity = 500.dp
-//)
+private val DECAY_ANIMATION: Animation<Dp, AnimationVector1D> = DecayAnimation(
+    animationSpec = exponentialDecay(),
+    typeConverter = Dp.VectorConverter,
+    initialValue = 0.dp,
+    initialVelocity = 500.dp
+)
+
 
 @Composable
-fun AnimationPresentationSample(
+fun AnimationHeartSamplesScreen() {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        AnimationPresentationSample(animation = ANIMATION)
+        Spacer(modifier = Modifier.height(16.dp))
+        AnimationPresentationSample(animation = DECAY_ANIMATION)
+    }
+}
+
+@Composable
+private fun AnimationPresentationSample(
     modifier: Modifier = Modifier,
     animation: Animation<Dp, AnimationVector1D> = ANIMATION
 ) {
@@ -80,7 +95,7 @@ fun AnimationPresentationSample(
 }
 
 @Composable
-fun PresentationTimeWithHeart(
+private fun PresentationTimeWithHeart(
     modifier: Modifier = Modifier,
     timeMs: Long,
     animation: Animation<Dp, AnimationVector1D> = ANIMATION
