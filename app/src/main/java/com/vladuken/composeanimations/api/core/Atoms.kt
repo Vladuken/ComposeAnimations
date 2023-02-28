@@ -1,36 +1,20 @@
-package com.vladuken.composeanimations.animation
+package com.vladuken.composeanimations.api.core
 
 import androidx.annotation.FloatRange
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -57,7 +41,7 @@ fun ShowHideButton(
 
 
 @Composable
-fun AnimationSpot(
+fun AnimationSlot(
     modifier: Modifier = Modifier,
     title: String,
     content: @Composable () -> Unit
@@ -123,30 +107,68 @@ fun AnimationSpot(
 }
 
 @Composable
-fun AnimationDebugString(
+fun AnimationLineString(
     modifier: Modifier = Modifier,
     @FloatRange(from = 0.0, to = 1.0) fraction: Float,
-    text: String
+    text: String? = null,
+    baserFraction: Float = 0.8f,
+    pinColor: Color = Color.DarkGray
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
+            .padding(vertical = 4.dp),
     ) {
-        Text(text = text)
-        Spacer(
-            modifier = Modifier
-                .background(Color.Gray)
-                .height(8.dp)
-                .fillMaxWidth(fraction)
-        )
+        if (text != null) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+        BoxWithConstraints(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            val startOffset = maxWidth * (1f - baserFraction)
+            Spacer(
+                modifier = Modifier
+                    .padding(horizontal = startOffset)
+                    .fillMaxWidth()
+                    .height(4.dp)
+                    .alpha(0.2f)
+                    .background(Color.Gray)
+            )
+            val pinSize = 16.dp
+            Card(
+                modifier = Modifier
+                    .size(pinSize)
+                    .offset(x = startOffset + (maxWidth - startOffset * 2) * fraction - pinSize / 2),
+                shape = RoundedCornerShape(4.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = pinColor
+                )
+            ) {}
+        }
     }
 }
 
-@Preview
 @Composable
-fun AnimationDebugStringPreview() {
-    AnimationDebugString(
+fun GroupHeader(heading: String) {
+    Text(
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .fillMaxWidth(),
+        text = heading,
+        style = MaterialTheme.typography.titleMedium,
+        textAlign = TextAlign.Center
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AnimationLineStringPreview() {
+    AnimationLineString(
         text = "Some Temple Text",
         fraction = 0.5f
     )
@@ -154,8 +176,8 @@ fun AnimationDebugStringPreview() {
 
 @Preview
 @Composable
-fun AnimationSpotPreview() {
-    AnimationSpot(title = "Test Title") {
+fun AnimationSlotPreview() {
+    AnimationSlot(title = "Test Title") {
         Text(text = "Content")
     }
 }
